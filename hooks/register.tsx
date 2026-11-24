@@ -27,23 +27,17 @@ const { theme, problems } = makeColors({
 const CELL = 14
 const W = 1440
 const H = 900
-const PATTERNS: Array<[number, number, Array<[number, number]>]> = [
-  [6, 6, [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]]],
-  [90, 10, [[0, 0], [1, 0], [2, 0]]],
-  [12, 48, [[0, 0], [1, 0], [0, 1], [1, 1]]],
-  [86, 50, [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]]],
-  [20, 26, [[0, 1], [1, 1], [2, 1]]],
-  [96, 30, [[0, 0], [1, 0], [0, 1], [3, 2], [2, 3], [3, 3]]],
-  [4, 34, [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]]],
-  [70, 58, [[0, 0], [1, 0], [2, 0], [2, 1], [1, 2]]],
-]
-const cells = PATTERNS.flatMap(([ox, oy, pts]) =>
-  pts.map(([x, y]) => {
-    const cx = (ox + x) * CELL + CELL / 2
-    const cy = (oy + y) * CELL + CELL / 2
-    return `<circle cx="${cx}" cy="${cy}" r="9" fill="#3ee6a8" opacity="0.12"/><circle cx="${cx}" cy="${cy}" r="4.5" fill="#3ee6a8" opacity="0.55"/>`
-  }),
-).join('')
+// TEMPORARY, for diagnosis: amber cells in a diagonal band across the whole board,
+// so the still fallback can't be mistaken for the live (mint) shader.
+const cells = Array.from({ length: 103 }, (_, x) => x)
+  .flatMap(x => [-2, -1, 0, 1, 2].map(o => [x, Math.round(x * 0.625) + o] as const))
+  .filter(([x, y]) => (x * 7 + y * 13) % 3 !== 0)
+  .map(([x, y]) => {
+    const cx = x * CELL + CELL / 2
+    const cy = y * CELL + CELL / 2
+    return `<circle cx="${cx}" cy="${cy}" r="9" fill="#f0b860" opacity="0.15"/><circle cx="${cx}" cy="${cy}" r="4.5" fill="#f0b860" opacity="0.7"/>`
+  })
+  .join('')
 
 const SCENE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">
 <defs>
