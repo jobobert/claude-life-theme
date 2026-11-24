@@ -4,20 +4,17 @@ import {
   clamp,
   dt,
   exp,
-  first,
   floor,
   fract,
   frame,
-  fresh,
   int,
   length,
   mix,
+  mod,
   picture,
   pointers,
   shader,
   smoothstep,
-  still,
-  time,
   unsigned,
   vec2,
   vec3,
@@ -41,19 +38,22 @@ const hash = (c: vec2, k: number) => {
 const life: Buffer = buffer({ scale: 1 / S, filter: 'nearest', float: 16 }, p => {
   const c = p.cell
 
-  if (first || fresh) {
+  const self = life.at(c)
+
+  // Buffers start cleared, so w = 0 means this cell was never set up: seed it once.
+  if (self.w < 0.5) {
     const seed = hash(c, 1) > 0.8 ? 1 : 0
     return vec4(seed, 0, seed, 1)
   }
-
-  const self = life.at(c)
   let alive = self.x
   let glow = self.y * exp(-dt * 0.6)
 
-  const gen = floor(time / STEP)
-  const tick = gen - floor((time - dt) / STEP) > 0.5
+  // One generation every STEP seconds, counted in frames (30 fps).
+  const every = STEP * 30
+  const gen = floor(frame / every)
+  const tick = abs(mod(frame, every)) < 0.5
 
-  if (tick && still < 0.5) {
+  if (tick) {
     let n = 0
     for (const [ox, oy] of [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]] as const) {
       n += life.at(c + vec2(ox, oy)).x
