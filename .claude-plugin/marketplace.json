@@ -1,0 +1,5 @@
+{
+  "name": "claude-life-theme",
+  "owner": { "name": "jobobert" },
+  "plugins": [{ "name": "life-theme", "source": "./" }]
+}
