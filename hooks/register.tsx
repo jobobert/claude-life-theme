@@ -122,7 +122,7 @@ export const register: Register = on => {
     const { Shader, Svg } = $.ui.resolve(e)
 
     return (
-      <Shader module="./life.ts">
+      <Shader module="./probe.ts">
         <Svg source={SCENE} alt="A Game of Life board of glowing mint cells on a dark grid" />
       </Shader>
     )
