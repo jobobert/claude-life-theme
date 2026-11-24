@@ -1,6 +1,6 @@
 # Life — a Game of Life theme for Claude
 
-A dark theme for the Claude desktop and mobile apps. Behind the conversation, a board of mint cells lives and dies by Conway's Game of Life, one gentle generation every 0.7 seconds. Move your cursor to plant a trail of new cells; click to plant a burst. Freshly planted cells glow cyan, then cool to mint as the rules take over.
+A dark theme for the Claude desktop and mobile apps. Behind the conversation, over a ground that slowly drifts between deep blue and deep purple, a board of mint cells lives and dies by Conway's Game of Life, one gentle generation every 0.9 seconds. The board starts empty: move your cursor to plant a trail of cells, or click to plant a blob, and watch them break up into blinkers, blocks and gliders. Freshly planted cells glow cyan, then cool to mint as the rules take over.
 
 - Deep blue-black surfaces with a mint accent (dark mode only)
 - Live, GPU-drawn board on desktop; a still board on mobile and under Reduce Motion
@@ -29,5 +29,5 @@ In the desktop app, where `/plugin` does not run: click **+** next to the prompt
 
 ## Tweaking
 
-- `hooks/life.ts` — the shader: cell size (`S`), generation speed (`STEP`), colors, and what the cursor plants
+- `hooks/life.ts` — the shader: cell size (`S`), generation speed (`STEP`), the ground and cell colors, and what the cursor plants
 - `hooks/register.tsx` — the color palette, the still fallback scene, and message styling

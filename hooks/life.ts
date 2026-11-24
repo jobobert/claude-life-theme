@@ -1,5 +1,9 @@
-// STEP 2 of finding what the Windows app rejects: step 1 (stored board + cursor)
-// plus the Life rules. No randomness: the board starts empty and the cursor seeds it.
+// Conway's Game of Life over a slowly drifting blue-purple ground.
+// The board starts empty and the cursor seeds it: no randomness.
+//
+// Kept to plain constructs on purpose. The Windows desktop app fell back to the still
+// scene for a version with a random start, a frame counter (frame, mod), a one-time setup
+// branch and 16-bit float buffers. This version, without them, plays there.
 import {
   abs,
   buffer,
