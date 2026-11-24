@@ -2,22 +2,23 @@ import {
   abs,
   buffer,
   clamp,
-  dot,
   dt,
   exp,
   first,
   floor,
   fract,
+  frame,
   fresh,
+  int,
   length,
   mix,
   picture,
   pointers,
   shader,
-  sin,
   smoothstep,
   still,
   time,
+  unsigned,
   vec2,
   vec3,
   vec4,
@@ -28,7 +29,13 @@ import {
 const S = 14
 const STEP = 0.7
 
-const hash = (c: vec2, k: number) => fract(sin(dot(c, vec2(127.1, 311.7)) + k * 74.7) * 43758.5453)
+// Integer hash: the same on every GPU (sin() of large numbers is not).
+const hash = (c: vec2, k: number) => {
+  let h = int(c.x) * 374761393 + int(c.y) * 668265263 + int(k) * 1274126177
+  h = (h ^ (h >>> 13)) * 1103515245
+  h = h ^ (h >>> 16)
+  return unsigned(h) / 4294967296
+}
 
 // One texel per cell: x alive, y "fresh from the cursor" glow, z eased brightness.
 const life: Buffer = buffer({ scale: 1 / S, filter: 'nearest', float: 16 }, p => {
@@ -64,11 +71,11 @@ const life: Buffer = buffer({ scale: 1 / S, filter: 'nearest', float: 16 }, p =>
   for (const ptr of pointers) {
     const d = length(p.point - ptr.at)
     const moved = length(ptr.at - ptr.was) > 0.5
-    if (ptr.gone < 0.001 && moved && d < S * 1.6 && hash(c, time) > 0.5) {
+    if (ptr.gone < 0.001 && moved && d < S * 1.6 && hash(c, frame) > 0.5) {
       alive = 1
       glow = 1
     }
-    if (ptr.down > 0.5 && ptr.age < 0.001 && d < S * 4 && hash(c, time + 3) > 0.55) {
+    if (ptr.down > 0.5 && ptr.age < 0.001 && d < S * 4 && hash(c, frame + 7) > 0.55) {
       alive = 1
       glow = 1
     }
